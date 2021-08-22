@@ -11,6 +11,7 @@ import { getPollMetaInfoList } from '../getPollMetaInfoList'
 import { useLocalStorage } from '../useLocalStorage'
 import DraftSection from './DraftSection'
 import { getDefaultPollValueInfoList } from './getDefaultPollValueInfoList'
+import { getIsMultiple } from './getIsMultiple'
 import { getPollValueInfoUpdater } from './getPollValueInfoUpdater'
 import { getSelectedValue } from './getSelectedValue'
 import PollButton from './PollButton'
@@ -47,7 +48,7 @@ const Detail = (props: DetailProps) => {
   const { pollId } = props
 
   /** cache calculated result with useMemo to avoid generate different random colors when rerender */
-  const isMultiple = useMemo(() => getPollMetaInfoList(pollId), [pollId])
+  const isMultiple = useMemo(() => getIsMultiple(pollId), [pollId])
   /** cache calculated result with useMemo to avoid generate different random colors when rerender */
   const pollMetaInfoList = useMemo(() => getPollMetaInfoList(pollId), [pollId])
 
