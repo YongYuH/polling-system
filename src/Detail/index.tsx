@@ -17,7 +17,16 @@ import { getPollValueInfoUpdater } from './getPollValueInfoUpdater'
 import { getSelectedValue } from './getSelectedValue'
 import PollButton from './PollButton'
 
-const DesktopHeadSection = styled.div``
+const DesktopSection = styled.div`
+  @media (max-width: 767px) {
+    display: none;
+  }
+`
+const MobileSection = styled.div`
+  @media (min-width: 768px) {
+    display: none;
+  }
+`
 const DesktopTitleSection = styled.div`
   border-bottom: 1px dashed #eaeaea;
   font-size: 24px;
@@ -26,15 +35,28 @@ const DesktopTitleSection = styled.div`
 const DesktopPublishDateSection = styled(Grid)`
   padding: 8px;
 `
+const MobileTitleSection = styled.div``
 const BackgroundWrapper = styled(Grid)`
   background-color: #acd0e6;
-  padding: 32px;
-  grid-row-gap: 32px;
+  grid-row-gap: 8px;
+  padding: 8px;
+
+  @media (min-width: 768px) {
+    grid-row-gap: 32px;
+    padding: 32px;
+  }
 `
 const VoteSection = styled(Grid)`
   grid-auto-flow: column;
 `
-const StatisticSection = styled.div``
+const StatisticSection = styled.div`
+  display: flex;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    justify-content: flex-start;
+  }
+`
 const ButtonGroupSection = styled(Grid)`
   grid-auto-flow: column;
 `
@@ -63,18 +85,23 @@ interface DetailProps {
 const Detail = (props: DetailProps) => {
   const { pollId } = props
 
-  /** cache calculated result with useMemo to avoid generate different random colors when rerender */
+  /** cache calculated result with useMemo to improve performance */
   const poll = useMemo(() => getPoll(pollId), [pollId])
   const isMultiple = poll.answer.type === 'Multi'
-  const pollMetaInfoList = poll.answer.options.map((option) => ({
-    key: `${option.label}-${option.id}`,
-    title: option.label,
-    /** generate random dark background color to improve the text legibility of white label */
-    color: randomColor({
-      luminosity: 'dark',
-    }),
-    id: option.id,
-  }))
+  /** cache calculated result with useMemo to avoid generate different random colors when rerender */
+  const pollMetaInfoList = useMemo(
+    () =>
+      poll.answer.options.map((option) => ({
+        key: `${option.label}-${option.id}`,
+        title: option.label,
+        /** generate random dark background color to improve the text legibility of white label */
+        color: randomColor({
+          luminosity: 'dark',
+        }),
+        id: option.id,
+      })),
+    [poll.id]
+  )
 
   /** get statistic value from local storage if it exists */
   const [pollValueInfoList, setPollValueInfoList] = useLocalStorage<PollValueInfo[]>(
@@ -151,13 +178,14 @@ const Detail = (props: DetailProps) => {
 
   return (
     <>
-      <DesktopHeadSection>
+      <DesktopSection>
         <DesktopTitleSection>{poll.title}</DesktopTitleSection>
         <DesktopPublishDateSection justifyItems="flex-end">
           PUBLISHED: {format(poll.publishedDate, 'EEEE, dd LLLL, yyyy, h:mmaaa')}
         </DesktopPublishDateSection>
-      </DesktopHeadSection>
+      </DesktopSection>
       <BackgroundWrapper>
+        <MobileTitleSection>{poll.title}</MobileTitleSection>
         <VoteSection>
           <ButtonGroupSection>
             <ButtonGroup>
@@ -170,20 +198,33 @@ const Detail = (props: DetailProps) => {
                 />
               ))}
             </ButtonGroup>
-            {draftSelectedIdList.length > 0 && (
-              <DraftSection
-                draftSelectedTitleList={draftSelectedIdList.map((id) =>
-                  getSelectedValue({ id, pollMetaInfoList })
-                )}
-                onClear={handleClearDraft}
-                onSubmit={handleSubmit}
-              />
-            )}
+            <DesktopSection>
+              {draftSelectedIdList.length > 0 && (
+                <DraftSection
+                  draftSelectedTitleList={draftSelectedIdList.map((id) =>
+                    getSelectedValue({ id, pollMetaInfoList })
+                  )}
+                  onClear={handleClearDraft}
+                  onSubmit={handleSubmit}
+                />
+              )}
+            </DesktopSection>
           </ButtonGroupSection>
           <Grid justifySelf="flex-end">
             <CustomizedPieChart data={data} totalVoteNumber={totalVoteNumber} />
           </Grid>
         </VoteSection>
+        <MobileSection>
+          {draftSelectedIdList.length > 0 && (
+            <DraftSection
+              draftSelectedTitleList={draftSelectedIdList.map((id) =>
+                getSelectedValue({ id, pollMetaInfoList })
+              )}
+              onClear={handleClearDraft}
+              onSubmit={handleSubmit}
+            />
+          )}
+        </MobileSection>
         <StatisticSection>Total number of votes recorded: {totalVoteNumber}</StatisticSection>
       </BackgroundWrapper>
     </>
