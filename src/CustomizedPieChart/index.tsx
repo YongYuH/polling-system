@@ -23,12 +23,7 @@ const label: Label = (labelRenderProps) => {
 
   /** customized the style of the label in the center of pie chart */
   if (dataEntry.title === customizedLabelInfo.data.title) {
-    return (
-      <CustomizedLabel
-        key={customizedLabelInfo.key}
-        fontSize={labelStyle.fontSize}
-      />
-    )
+    return <CustomizedLabel key={customizedLabelInfo.key} fontSize={labelStyle.fontSize} />
   }
 
   const roundedPercentage = Math.round(dataEntry.percentage)
