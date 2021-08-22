@@ -8,8 +8,8 @@ describe('getDefaultPollValueInfoList', () => {
     ]
 
     const expected = [
-      { id: 1, title: 'Yes', value: 1 },
-      { id: 2, title: 'No', value: 1 },
+      { id: 1, title: 'Yes', value: 0 },
+      { id: 2, title: 'No', value: 0 },
     ]
 
     const result = getDefaultPollValueInfoList(pollMetaInfoList)
