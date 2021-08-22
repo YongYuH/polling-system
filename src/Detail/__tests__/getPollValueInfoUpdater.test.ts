@@ -2,8 +2,8 @@ import { getPollValueInfoUpdater } from '../getPollValueInfoUpdater'
 
 describe('getPollValueInfoUpdater', () => {
   it('new poll in 6 options', () => {
-    const selectedPollId = '11'
-    const pollValueInfoListUpdater = getPollValueInfoUpdater(selectedPollId)
+    const selectedPollIdList = ['11', '9']
+    const pollValueInfoListUpdater = getPollValueInfoUpdater(selectedPollIdList)
 
     const originalState = [
       {
@@ -52,7 +52,7 @@ describe('getPollValueInfoUpdater', () => {
       {
         id: 9,
         title: 'Australia',
-        value: 9,
+        value: 10,
       },
       {
         id: 10,
