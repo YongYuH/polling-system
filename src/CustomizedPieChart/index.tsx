@@ -66,6 +66,7 @@ const CustomizedPieChart = (props: CustomizedPieChartProps) => {
         label={label}
         labelPosition={70}
         labelStyle={labelStyle}
+        lengthAngle={-360}
         lineWidth={60}
         startAngle={180}
       />

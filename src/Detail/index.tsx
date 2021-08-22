@@ -12,18 +12,19 @@ import { getDefaultPollValueInfoList } from './getDefaultPollValueInfoList'
 import { getPollValueInfoUpdater } from './getPollValueInfoUpdater'
 import PollButton from './PollButton'
 
-const Wrapper = styled.div`
-  background-color: #dbdbdb;
+const Wrapper = styled(Grid)`
+  background-color: #acd0e6;
+  padding: 32px;
+  grid-row-gap: 32px;
 `
-
-const StatisticSection = styled.div`
-  background-color: #dbdbdb;
-`
-
-const ButtonGroup = styled(Grid)`
-  grid-column-gap: 8px;
+const DesktopTitleSection = styled.div``
+const VoteSection = styled(Grid)`
   grid-auto-flow: column;
-  grid-template-columns: repeat(auto-fill, 100px);
+`
+const StatisticSection = styled.div``
+const ButtonGroup = styled(Grid)`
+  grid-row-gap: 8px;
+  width: 100px;
 `
 
 interface PollValueInfo {
@@ -44,7 +45,6 @@ const Detail = (props: DetailProps) => {
     getDefaultPollValueInfoList(pollMetaInfoList)
   )
   const [hasVoted, setHasVoted] = useState(false)
-  const [selectedValue, setSelectedValue] = useState('')
 
   const data = pollMetaInfoList.map((pollMetaInfo) => ({
     ...pollMetaInfo,
@@ -72,7 +72,6 @@ const Detail = (props: DetailProps) => {
         {
           label: 'Yes',
           onClick: () => {
-            setSelectedValue(selected)
             const selectedPollId = String(selected)
             const updater = getPollValueInfoUpdater(selectedPollId)
             setPollValueInfoList(updater)
@@ -101,17 +100,22 @@ const Detail = (props: DetailProps) => {
 
   return (
     <Wrapper>
-      <ButtonGroup>
-        {radioInfoList.map((radioInfo) => (
-          <PollButton
-            key={`radio-${radioInfo.label}`}
-            backgroundColor={radioInfo.backgroundColor}
-            label={radioInfo.label}
-            onClick={getClickHandler(radioInfo.value)}
-          />
-        ))}
-      </ButtonGroup>
-      <CustomizedPieChart data={data} totalVoteNumber={totalVoteNumber} />
+      <DesktopTitleSection></DesktopTitleSection>
+      <VoteSection>
+        <ButtonGroup>
+          {radioInfoList.map((radioInfo) => (
+            <PollButton
+              key={`radio-${radioInfo.label}`}
+              backgroundColor={radioInfo.backgroundColor}
+              label={radioInfo.label}
+              onClick={getClickHandler(radioInfo.value)}
+            />
+          ))}
+        </ButtonGroup>
+        <Grid justifySelf="flex-end">
+          <CustomizedPieChart data={data} totalVoteNumber={totalVoteNumber} />
+        </Grid>
+      </VoteSection>
       <StatisticSection>Total number of votes recorded: {totalVoteNumber}</StatisticSection>
     </Wrapper>
   )
