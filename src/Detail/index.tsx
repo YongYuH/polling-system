@@ -1,27 +1,36 @@
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
 import styled from '@emotion/styled'
+import { format } from 'date-fns'
 import { uniq } from 'rambda'
+import randomColor from 'randomColor'
 import React, { useMemo, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 
 import Grid from '../components/Grid'
 import CustomizedPieChart from '../CustomizedPieChart'
-import { getPollMetaInfoList } from '../getPollMetaInfoList'
 import { useLocalStorage } from '../useLocalStorage'
 import DraftSection from './DraftSection'
 import { getDefaultPollValueInfoList } from './getDefaultPollValueInfoList'
-import { getIsMultiple } from './getIsMultiple'
+import { getPoll } from './getPoll'
 import { getPollValueInfoUpdater } from './getPollValueInfoUpdater'
 import { getSelectedValue } from './getSelectedValue'
 import PollButton from './PollButton'
 
-const Wrapper = styled(Grid)`
+const DesktopHeadSection = styled.div``
+const DesktopTitleSection = styled.div`
+  border-bottom: 1px dashed #eaeaea;
+  font-size: 24px;
+  padding: 8px;
+`
+const DesktopPublishDateSection = styled(Grid)`
+  padding: 8px;
+`
+const BackgroundWrapper = styled(Grid)`
   background-color: #acd0e6;
   padding: 32px;
   grid-row-gap: 32px;
 `
-const DesktopTitleSection = styled.div``
 const VoteSection = styled(Grid)`
   grid-auto-flow: column;
 `
@@ -40,6 +49,13 @@ interface PollValueInfo {
   value: number
 }
 
+interface PollMetaInfo {
+  key: string
+  id: number
+  color: string
+  title: string
+}
+
 interface DetailProps {
   pollId: string
 }
@@ -48,9 +64,17 @@ const Detail = (props: DetailProps) => {
   const { pollId } = props
 
   /** cache calculated result with useMemo to avoid generate different random colors when rerender */
-  const isMultiple = useMemo(() => getIsMultiple(pollId), [pollId])
-  /** cache calculated result with useMemo to avoid generate different random colors when rerender */
-  const pollMetaInfoList = useMemo(() => getPollMetaInfoList(pollId), [pollId])
+  const poll = useMemo(() => getPoll(pollId), [pollId])
+  const isMultiple = poll.answer.type === 'Multi'
+  const pollMetaInfoList = poll.answer.options.map((option) => ({
+    key: `${option.label}-${option.id}`,
+    title: option.label,
+    /** generate random dark background color to improve the text legibility of white label */
+    color: randomColor({
+      luminosity: 'dark',
+    }),
+    id: option.id,
+  }))
 
   /** get statistic value from local storage if it exists */
   const [pollValueInfoList, setPollValueInfoList] = useLocalStorage<PollValueInfo[]>(
@@ -126,39 +150,46 @@ const Detail = (props: DetailProps) => {
   }, 0)
 
   return (
-    <Wrapper>
-      <DesktopTitleSection></DesktopTitleSection>
-      <VoteSection>
-        <ButtonGroupSection>
-          <ButtonGroup>
-            {radioInfoList.map((radioInfo) => (
-              <PollButton
-                key={`radio-${radioInfo.label}`}
-                backgroundColor={radioInfo.backgroundColor}
-                label={radioInfo.label}
-                onClick={getClickHandler(radioInfo.value)}
+    <>
+      <DesktopHeadSection>
+        <DesktopTitleSection>{poll.title}</DesktopTitleSection>
+        <DesktopPublishDateSection justifyItems="flex-end">
+          PUBLISHED: {format(poll.publishedDate, 'EEEE, dd LLLL, yyyy, h:mmaaa')}
+        </DesktopPublishDateSection>
+      </DesktopHeadSection>
+      <BackgroundWrapper>
+        <VoteSection>
+          <ButtonGroupSection>
+            <ButtonGroup>
+              {radioInfoList.map((radioInfo) => (
+                <PollButton
+                  key={`radio-${radioInfo.label}`}
+                  backgroundColor={radioInfo.backgroundColor}
+                  label={radioInfo.label}
+                  onClick={getClickHandler(radioInfo.value)}
+                />
+              ))}
+            </ButtonGroup>
+            {draftSelectedIdList.length > 0 && (
+              <DraftSection
+                draftSelectedTitleList={draftSelectedIdList.map((id) =>
+                  getSelectedValue({ id, pollMetaInfoList })
+                )}
+                onClear={handleClearDraft}
+                onSubmit={handleSubmit}
               />
-            ))}
-          </ButtonGroup>
-          {draftSelectedIdList.length > 0 && (
-            <DraftSection
-              draftSelectedTitleList={draftSelectedIdList.map((id) =>
-                getSelectedValue({ id, pollMetaInfoList })
-              )}
-              onClear={handleClearDraft}
-              onSubmit={handleSubmit}
-            />
-          )}
-        </ButtonGroupSection>
-        <Grid justifySelf="flex-end">
-          <CustomizedPieChart data={data} totalVoteNumber={totalVoteNumber} />
-        </Grid>
-      </VoteSection>
-      <StatisticSection>Total number of votes recorded: {totalVoteNumber}</StatisticSection>
-    </Wrapper>
+            )}
+          </ButtonGroupSection>
+          <Grid justifySelf="flex-end">
+            <CustomizedPieChart data={data} totalVoteNumber={totalVoteNumber} />
+          </Grid>
+        </VoteSection>
+        <StatisticSection>Total number of votes recorded: {totalVoteNumber}</StatisticSection>
+      </BackgroundWrapper>
+    </>
   )
 }
 
-export type { PollValueInfo }
+export type { PollMetaInfo, PollValueInfo }
 
 export default Detail

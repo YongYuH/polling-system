@@ -1,5 +1,4 @@
-import type { PollMetaInfo } from '../getPollMetaInfoList'
-import type { PollValueInfo } from './index'
+import type { PollMetaInfo, PollValueInfo } from './index'
 
 type GetDefaultPollValueInfo = (pollMetaInfoList: PollMetaInfo[]) => PollValueInfo[]
 

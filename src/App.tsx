@@ -3,9 +3,7 @@ import React from 'react'
 
 import Detail from './Detail'
 
-const Wrapper = styled.div`
-  background-color: #dbdbdb;
-`
+const Wrapper = styled.div``
 
 const App = () => {
   return (

@@ -1,4 +1,4 @@
-import { PollMetaInfo } from '../getPollMetaInfoList'
+import type { PollMetaInfo } from './index'
 
 interface GetSelectedValueArgs {
   id: string | number
