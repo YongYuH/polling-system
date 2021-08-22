@@ -13,7 +13,8 @@
     "react-confirm-alert": "2.7.0",
     "react-dom": "17.0.2",
     "react-minimal-pie-chart": "8.2.0",
-    "react-radio-group": "3.0.3"
+    "react-radio-group": "3.0.3",
+    "styled-system": "5.1.5"
   },
   "devDependencies": {
     "@types/browser-sync": "2.26.2",
@@ -23,6 +24,7 @@
     "@types/react": "17.0.14",
     "@types/react-dom": "17.0.9",
     "@types/react-radio-group": "3.0.3",
+    "@types/styled-system": "5.1.13",
     "@typescript-eslint/eslint-plugin": "4.28.3",
     "@typescript-eslint/parser": "4.28.3",
     "esbuild": "0.12.15",

@@ -35,15 +35,26 @@ const Wrapper = styled.div`
   width: 200px;
 `
 
+const PlaceholderWrapper = styled.div`
+  padding: 32px 16px;
+`
+
 interface CustomizedPieChartProps {
   data: Data
+  totalVoteNumber: number
 }
 
 const CustomizedPieChart = (props: CustomizedPieChartProps) => {
-  const { data } = props
+  const { data, totalVoteNumber } = props
+
+  if (totalVoteNumber === 0) {
+    return (
+      <PlaceholderWrapper>No one has voted yet. Be the first person to vote!</PlaceholderWrapper>
+    )
+  }
 
   const dataWithCustomizedLabel = [
-    ...data,
+    ...data.filter((x) => x.value !== 0),
     /** append customized data to show the label in the center of pie chart */
     customizedLabelInfo.data,
   ]
@@ -56,7 +67,7 @@ const CustomizedPieChart = (props: CustomizedPieChartProps) => {
         labelPosition={70}
         labelStyle={labelStyle}
         lineWidth={60}
-        startAngle={-90}
+        startAngle={180}
       />
     </Wrapper>
   )

@@ -5,7 +5,7 @@ type GetDefaultPollValueInfo = (pollMetaInfoList: PollMetaInfo[]) => PollValueIn
 
 const getDefaultPollValueInfoList: GetDefaultPollValueInfo = (pollMetaInfoList) => {
   const result = pollMetaInfoList.reduce((acc, cur) => {
-    return [...acc, { id: cur.id, title: cur.title, value: 1 }]
+    return [...acc, { id: cur.id, title: cur.title, value: 0 }]
   }, [] as PollValueInfo[])
   return result
 }

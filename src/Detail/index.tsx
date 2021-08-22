@@ -3,13 +3,14 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 import styled from '@emotion/styled'
 import React, { useMemo, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
-import { Radio, RadioGroup } from 'react-radio-group'
 
+import Grid from '../components/Grid'
 import CustomizedPieChart from '../CustomizedPieChart'
 import { getPollMetaInfoList } from '../getPollMetaInfoList'
 import { useLocalStorage } from '../useLocalStorage'
 import { getDefaultPollValueInfoList } from './getDefaultPollValueInfoList'
 import { getPollValueInfoUpdater } from './getPollValueInfoUpdater'
+import PollButton from './PollButton'
 
 const Wrapper = styled.div`
   background-color: #dbdbdb;
@@ -17,6 +18,12 @@ const Wrapper = styled.div`
 
 const StatisticSection = styled.div`
   background-color: #dbdbdb;
+`
+
+const ButtonGroup = styled(Grid)`
+  grid-column-gap: 8px;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(auto-fill, 100px);
 `
 
 interface PollValueInfo {
@@ -41,10 +48,10 @@ const Detail = (props: DetailProps) => {
 
   const data = pollMetaInfoList.map((pollMetaInfo) => ({
     ...pollMetaInfo,
-    value: pollValueInfoList.find((x) => String(x.id) === String(pollMetaInfo.id))?.value ?? 1,
+    value: pollValueInfoList.find((x) => String(x.id) === String(pollMetaInfo.id))?.value ?? 0,
   }))
 
-  const handleRadioGroupChange = (selected) => {
+  const getClickHandler = (selected) => () => {
     if (hasVoted) {
       confirmAlert({
         title: 'You have voted!',
@@ -82,6 +89,7 @@ const Detail = (props: DetailProps) => {
 
   const radioInfoList = data.map((x) => {
     return {
+      backgroundColor: x.color,
       label: x.title,
       value: x.id,
     }
@@ -93,15 +101,17 @@ const Detail = (props: DetailProps) => {
 
   return (
     <Wrapper>
-      <RadioGroup selectedValue={selectedValue} onChange={handleRadioGroupChange}>
+      <ButtonGroup>
         {radioInfoList.map((radioInfo) => (
-          <label key={`radio-${radioInfo.label}`}>
-            <Radio value={radioInfo.value} />
-            {radioInfo.label}
-          </label>
+          <PollButton
+            key={`radio-${radioInfo.label}`}
+            backgroundColor={radioInfo.backgroundColor}
+            label={radioInfo.label}
+            onClick={getClickHandler(radioInfo.value)}
+          />
         ))}
-      </RadioGroup>
-      <CustomizedPieChart data={data} />
+      </ButtonGroup>
+      <CustomizedPieChart data={data} totalVoteNumber={totalVoteNumber} />
       <StatisticSection>Total number of votes recorded: {totalVoteNumber}</StatisticSection>
     </Wrapper>
   )
