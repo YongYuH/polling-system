@@ -15,9 +15,10 @@ const Wrapper = styled.div`
   }
 `
 const BorderSection = styled(Grid)`
-  padding: 8px 0 16px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   width: calc(100% - 8px);
+  height: 100%;
+  align-items: center;
 `
 const Date = styled.div`
   color: #196b95;
@@ -26,6 +27,11 @@ const Date = styled.div`
 `
 const Title = styled.div`
   font-size: 12px;
+`
+const Text = styled.div`
+  display: grid;
+  grid-template-rows: max-content;
+  padding: 8px 0;
 `
 
 interface CardProps {
@@ -40,10 +46,10 @@ const Card = (props: CardProps) => {
     <Wrapper onClick={onClick}>
       <BorderSection gridAutoFlow="column" gridColumnGap="8px" gridTemplateColumns="max-content">
         <PieChartIcon />
-        <Grid gridTemplateRows="max-content">
+        <Text>
           <Date>{format(publishedDate, 'dd MMM yyyy').toUpperCase()}</Date>
           <Title>{title}</Title>
-        </Grid>
+        </Text>
       </BorderSection>
     </Wrapper>
   )

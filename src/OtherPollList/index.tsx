@@ -8,7 +8,12 @@ import Card from './Card'
 const polls = pollsJson.polls
 
 const Wrapper = styled(Grid)`
-  margin: 16px;
+  margin: 16px 0;
+
+  @media (min-width: 768px) {
+    grid-row-gap: 8px;
+  }
+
   & > * {
     border-right: 1px solid rgba(0, 0, 0, 0.25);
   }
