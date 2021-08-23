@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { uniq } from 'rambda'
 import randomColor from 'randomcolor'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
 import { BsFillChatFill } from 'react-icons/bs'
 
@@ -125,6 +125,12 @@ const Detail = (props: DetailProps) => {
   )
 
   const [hasVoted, setHasVoted] = useState(false)
+
+  /** reset flag of hasVoted when poll id changes */
+  useEffect(() => {
+    setHasVoted(false)
+  }, [pollId])
+
   const [draftSelectedIdList, setDraftSelectedIdList] = useState([])
 
   const data = pollMetaInfoList.map((pollMetaInfo) => ({
