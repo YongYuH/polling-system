@@ -1,11 +1,13 @@
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
+import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { uniq } from 'rambda'
 import randomColor from 'randomColor'
 import React, { useMemo, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
+import { BsFillChatFill } from 'react-icons/bs'
 
 import Grid from '../components/Grid'
 import { useLocalStorage } from '../useLocalStorage'
@@ -37,7 +39,7 @@ const DesktopPublishDateSection = styled(Grid)`
 `
 const BackgroundWrapper = styled(Grid)`
   background-color: #dbdbdb;
-  grid-row-gap: 16px;
+  grid-row-gap: 8px;
   padding: 8px;
 
   @media (min-width: 768px) {
@@ -48,6 +50,12 @@ const BackgroundWrapper = styled(Grid)`
 const DescriptionSection = styled(Grid)`
   grid-row-gap: 8px;
   padding: 0 8px;
+`
+const TodayTitleWrapper = styled(Grid)`
+  grid-auto-flow: column;
+  grid-column-gap: 4px;
+  grid-template-columns: max-content;
+  align-items: center;
 `
 const Title = styled.div`
   color: #196b95;
@@ -185,6 +193,18 @@ const Detail = (props: DetailProps) => {
 
   return (
     <>
+      <Global
+        styles={css`
+          .react-confirm-alert-body {
+            @media (max-width: 767px) {
+              width: 250px;
+            }
+            @media (min-width: 768px) {
+              width: 400px;
+            }
+          }
+        `}
+      />
       <DesktopSection>
         <DesktopTitleSection>{poll.title}</DesktopTitleSection>
         <DesktopPublishDateSection justifyItems="flex-end">
@@ -193,7 +213,10 @@ const Detail = (props: DetailProps) => {
       </DesktopSection>
       <BackgroundWrapper>
         <MobileSection>
-          <Title>Today&apos;s Poll</Title>
+          <TodayTitleWrapper>
+            <BsFillChatFill color="#006693" />
+            <Title>Today&apos;s Poll</Title>
+          </TodayTitleWrapper>
         </MobileSection>
         <DescriptionSection>
           <MobileSection>{poll.title}</MobileSection>
