@@ -35,8 +35,9 @@ const DesktopTitleSection = styled.div`
 const DesktopPublishDateSection = styled(Grid)`
   padding: 8px;
 `
-const BackgroundWrapper = styled.div`
+const BackgroundWrapper = styled(Grid)`
   background-color: #dbdbdb;
+  grid-row-gap: 16px;
   padding: 8px;
 
   @media (min-width: 768px) {
