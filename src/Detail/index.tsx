@@ -35,15 +35,22 @@ const DesktopTitleSection = styled.div`
 const DesktopPublishDateSection = styled(Grid)`
   padding: 8px;
 `
-const BackgroundWrapper = styled(Grid)`
-  background-color: #acd0e6;
-  grid-row-gap: 8px;
+const BackgroundWrapper = styled.div`
+  background-color: #dbdbdb;
   padding: 8px;
 
   @media (min-width: 768px) {
     grid-row-gap: 32px;
     padding: 32px;
   }
+`
+const DescriptionSection = styled(Grid)`
+  grid-row-gap: 8px;
+  padding: 0 8px;
+`
+const Title = styled.div`
+  color: #196b95;
+  font-weight: bold;
 `
 const VoteSection = styled(Grid)`
   grid-auto-flow: column;
@@ -184,46 +191,51 @@ const Detail = (props: DetailProps) => {
         </DesktopPublishDateSection>
       </DesktopSection>
       <BackgroundWrapper>
-        <MobileSection>{poll.title}</MobileSection>
-        <VoteSection>
-          <ButtonGroupSection>
-            <ButtonGroup>
-              {radioInfoList.map((radioInfo) => (
-                <PollButton
-                  key={`radio-${radioInfo.label}`}
-                  backgroundColor={radioInfo.backgroundColor}
-                  label={radioInfo.label}
-                  onClick={getClickHandler(radioInfo.value)}
-                />
-              ))}
-            </ButtonGroup>
-            <DesktopSection>
-              {draftSelectedIdList.length > 0 && (
-                <DraftSection
-                  draftSelectedTitleList={draftSelectedIdList.map((id) =>
-                    getSelectedValue({ id, pollMetaInfoList })
-                  )}
-                  onClear={handleClearDraft}
-                  onSubmit={handleSubmit}
-                />
-              )}
-            </DesktopSection>
-          </ButtonGroupSection>
-          <Grid justifySelf="flex-end">
-            <CustomizedPieChart data={data} totalVoteNumber={totalVoteNumber} />
-          </Grid>
-        </VoteSection>
         <MobileSection>
-          {draftSelectedIdList.length > 0 && (
-            <DraftSection
-              draftSelectedTitleList={draftSelectedIdList.map((id) =>
-                getSelectedValue({ id, pollMetaInfoList })
-              )}
-              onClear={handleClearDraft}
-              onSubmit={handleSubmit}
-            />
-          )}
+          <Title>Today&apos;s Poll</Title>
         </MobileSection>
+        <DescriptionSection>
+          <MobileSection>{poll.title}</MobileSection>
+          <VoteSection>
+            <ButtonGroupSection>
+              <ButtonGroup>
+                {radioInfoList.map((radioInfo) => (
+                  <PollButton
+                    key={`radio-${radioInfo.label}`}
+                    backgroundColor={radioInfo.backgroundColor}
+                    label={radioInfo.label}
+                    onClick={getClickHandler(radioInfo.value)}
+                  />
+                ))}
+              </ButtonGroup>
+              <DesktopSection>
+                {draftSelectedIdList.length > 0 && (
+                  <DraftSection
+                    draftSelectedTitleList={draftSelectedIdList.map((id) =>
+                      getSelectedValue({ id, pollMetaInfoList })
+                    )}
+                    onClear={handleClearDraft}
+                    onSubmit={handleSubmit}
+                  />
+                )}
+              </DesktopSection>
+            </ButtonGroupSection>
+            <Grid justifySelf="flex-end">
+              <CustomizedPieChart data={data} totalVoteNumber={totalVoteNumber} />
+            </Grid>
+          </VoteSection>
+          <MobileSection>
+            {draftSelectedIdList.length > 0 && (
+              <DraftSection
+                draftSelectedTitleList={draftSelectedIdList.map((id) =>
+                  getSelectedValue({ id, pollMetaInfoList })
+                )}
+                onClear={handleClearDraft}
+                onSubmit={handleSubmit}
+              />
+            )}
+          </MobileSection>
+        </DescriptionSection>
         <StatisticSection>Total number of votes recorded: {totalVoteNumber}</StatisticSection>
       </BackgroundWrapper>
     </>
