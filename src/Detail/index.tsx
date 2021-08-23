@@ -1,15 +1,17 @@
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
+import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { uniq } from 'rambda'
 import randomColor from 'randomColor'
 import React, { useMemo, useState } from 'react'
 import { confirmAlert } from 'react-confirm-alert'
+import { BsFillChatFill } from 'react-icons/bs'
 
 import Grid from '../components/Grid'
-import CustomizedPieChart from '../CustomizedPieChart'
 import { useLocalStorage } from '../useLocalStorage'
+import CustomizedPieChart from './CustomizedPieChart'
 import DraftSection from './DraftSection'
 import { getDefaultPollValueInfoList } from './getDefaultPollValueInfoList'
 import { getPoll } from './getPoll'
@@ -35,9 +37,8 @@ const DesktopTitleSection = styled.div`
 const DesktopPublishDateSection = styled(Grid)`
   padding: 8px;
 `
-const MobileTitleSection = styled.div``
 const BackgroundWrapper = styled(Grid)`
-  background-color: #acd0e6;
+  background-color: #dbdbdb;
   grid-row-gap: 8px;
   padding: 8px;
 
@@ -45,6 +46,20 @@ const BackgroundWrapper = styled(Grid)`
     grid-row-gap: 32px;
     padding: 32px;
   }
+`
+const DescriptionSection = styled(Grid)`
+  grid-row-gap: 8px;
+  padding: 0 8px;
+`
+const TodayTitleWrapper = styled(Grid)`
+  grid-auto-flow: column;
+  grid-column-gap: 4px;
+  grid-template-columns: max-content;
+  align-items: center;
+`
+const Title = styled.div`
+  color: #196b95;
+  font-weight: bold;
 `
 const VoteSection = styled(Grid)`
   grid-auto-flow: column;
@@ -178,6 +193,18 @@ const Detail = (props: DetailProps) => {
 
   return (
     <>
+      <Global
+        styles={css`
+          .react-confirm-alert-body {
+            @media (max-width: 767px) {
+              width: 250px;
+            }
+            @media (min-width: 768px) {
+              width: 400px;
+            }
+          }
+        `}
+      />
       <DesktopSection>
         <DesktopTitleSection>{poll.title}</DesktopTitleSection>
         <DesktopPublishDateSection justifyItems="flex-end">
@@ -185,46 +212,54 @@ const Detail = (props: DetailProps) => {
         </DesktopPublishDateSection>
       </DesktopSection>
       <BackgroundWrapper>
-        <MobileTitleSection>{poll.title}</MobileTitleSection>
-        <VoteSection>
-          <ButtonGroupSection>
-            <ButtonGroup>
-              {radioInfoList.map((radioInfo) => (
-                <PollButton
-                  key={`radio-${radioInfo.label}`}
-                  backgroundColor={radioInfo.backgroundColor}
-                  label={radioInfo.label}
-                  onClick={getClickHandler(radioInfo.value)}
-                />
-              ))}
-            </ButtonGroup>
-            <DesktopSection>
-              {draftSelectedIdList.length > 0 && (
-                <DraftSection
-                  draftSelectedTitleList={draftSelectedIdList.map((id) =>
-                    getSelectedValue({ id, pollMetaInfoList })
-                  )}
-                  onClear={handleClearDraft}
-                  onSubmit={handleSubmit}
-                />
-              )}
-            </DesktopSection>
-          </ButtonGroupSection>
-          <Grid justifySelf="flex-end">
-            <CustomizedPieChart data={data} totalVoteNumber={totalVoteNumber} />
-          </Grid>
-        </VoteSection>
         <MobileSection>
-          {draftSelectedIdList.length > 0 && (
-            <DraftSection
-              draftSelectedTitleList={draftSelectedIdList.map((id) =>
-                getSelectedValue({ id, pollMetaInfoList })
-              )}
-              onClear={handleClearDraft}
-              onSubmit={handleSubmit}
-            />
-          )}
+          <TodayTitleWrapper>
+            <BsFillChatFill color="#006693" />
+            <Title>Today&apos;s Poll</Title>
+          </TodayTitleWrapper>
         </MobileSection>
+        <DescriptionSection>
+          <MobileSection>{poll.title}</MobileSection>
+          <VoteSection>
+            <ButtonGroupSection>
+              <ButtonGroup>
+                {radioInfoList.map((radioInfo) => (
+                  <PollButton
+                    key={`radio-${radioInfo.label}`}
+                    backgroundColor={radioInfo.backgroundColor}
+                    label={radioInfo.label}
+                    onClick={getClickHandler(radioInfo.value)}
+                  />
+                ))}
+              </ButtonGroup>
+              <DesktopSection>
+                {draftSelectedIdList.length > 0 && (
+                  <DraftSection
+                    draftSelectedTitleList={draftSelectedIdList.map((id) =>
+                      getSelectedValue({ id, pollMetaInfoList })
+                    )}
+                    onClear={handleClearDraft}
+                    onSubmit={handleSubmit}
+                  />
+                )}
+              </DesktopSection>
+            </ButtonGroupSection>
+            <Grid justifySelf="flex-end">
+              <CustomizedPieChart data={data} totalVoteNumber={totalVoteNumber} />
+            </Grid>
+          </VoteSection>
+          <MobileSection>
+            {draftSelectedIdList.length > 0 && (
+              <DraftSection
+                draftSelectedTitleList={draftSelectedIdList.map((id) =>
+                  getSelectedValue({ id, pollMetaInfoList })
+                )}
+                onClear={handleClearDraft}
+                onSubmit={handleSubmit}
+              />
+            )}
+          </MobileSection>
+        </DescriptionSection>
         <StatisticSection>Total number of votes recorded: {totalVoteNumber}</StatisticSection>
       </BackgroundWrapper>
     </>

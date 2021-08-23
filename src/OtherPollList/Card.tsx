@@ -9,20 +9,29 @@ const Wrapper = styled.div`
   cursor: pointer;
   padding: 0 8px;
 
-  &:nth-last-child(1) > *,
-  &:nth-last-child(2) > * {
+  &:nth-last-of-type(1) > *,
+  &:nth-last-of-type(2) > * {
     border-bottom: 1px solid transparent;
   }
 `
 const BorderSection = styled(Grid)`
-  padding: 8px 0 16px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   width: calc(100% - 8px);
+  height: 100%;
+  align-items: center;
 `
 const Date = styled.div`
   color: #196b95;
   font-size: 11px;
   font-weight: bold;
+`
+const Title = styled.div`
+  font-size: 12px;
+`
+const Text = styled.div`
+  display: grid;
+  grid-template-rows: max-content;
+  padding: 8px 0;
 `
 
 interface CardProps {
@@ -37,10 +46,10 @@ const Card = (props: CardProps) => {
     <Wrapper onClick={onClick}>
       <BorderSection gridAutoFlow="column" gridColumnGap="8px" gridTemplateColumns="max-content">
         <PieChartIcon />
-        <Grid gridTemplateRows="max-content">
+        <Text>
           <Date>{format(publishedDate, 'dd MMM yyyy').toUpperCase()}</Date>
-          <div>{title}</div>
-        </Grid>
+          <Title>{title}</Title>
+        </Text>
       </BorderSection>
     </Wrapper>
   )

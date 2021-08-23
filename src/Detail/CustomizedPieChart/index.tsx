@@ -32,7 +32,11 @@ const label: Label = (labelRenderProps) => {
 
 const Wrapper = styled.div`
   padding: 16px;
-  width: 200px;
+  width: 100px;
+
+  @media (min-width: 768px) {
+    width: 200px;
+  }
 `
 
 const PlaceholderWrapper = styled.div`
