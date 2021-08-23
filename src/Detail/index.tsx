@@ -35,7 +35,6 @@ const DesktopTitleSection = styled.div`
 const DesktopPublishDateSection = styled(Grid)`
   padding: 8px;
 `
-const MobileTitleSection = styled.div``
 const BackgroundWrapper = styled(Grid)`
   background-color: #acd0e6;
   grid-row-gap: 8px;
@@ -185,7 +184,7 @@ const Detail = (props: DetailProps) => {
         </DesktopPublishDateSection>
       </DesktopSection>
       <BackgroundWrapper>
-        <MobileTitleSection>{poll.title}</MobileTitleSection>
+        <MobileSection>{poll.title}</MobileSection>
         <VoteSection>
           <ButtonGroupSection>
             <ButtonGroup>
