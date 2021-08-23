@@ -12,6 +12,7 @@ yarn
 ```bash
 yarn dev
 ```
+4. the dev server would be running on http://localhost:3000
 
 # Implementation Description
 * folder structure: each component folder has an `index.tsx` file as the entry point. Define section components in the parent folder of section. Define reusable components in `components` folder
