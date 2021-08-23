@@ -13,7 +13,7 @@ const Wrapper = styled(Grid)`
     border-right: 1px solid rgba(0, 0, 0, 0.25);
   }
 
-  & > *:nth-child(even) {
+  & > *:nth-of-type(even) {
     border-right: 1px solid transparent;
   }
 `

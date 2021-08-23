@@ -9,8 +9,8 @@ const Wrapper = styled.div`
   cursor: pointer;
   padding: 0 8px;
 
-  &:nth-last-child(1) > *,
-  &:nth-last-child(2) > * {
+  &:nth-last-of-type(1) > *,
+  &:nth-last-of-type(2) > * {
     border-bottom: 1px solid transparent;
   }
 `
@@ -23,6 +23,9 @@ const Date = styled.div`
   color: #196b95;
   font-size: 11px;
   font-weight: bold;
+`
+const Title = styled.div`
+  font-size: 12px;
 `
 
 interface CardProps {
@@ -39,7 +42,7 @@ const Card = (props: CardProps) => {
         <PieChartIcon />
         <Grid gridTemplateRows="max-content">
           <Date>{format(publishedDate, 'dd MMM yyyy').toUpperCase()}</Date>
-          <div>{title}</div>
+          <Title>{title}</Title>
         </Grid>
       </BorderSection>
     </Wrapper>
