@@ -1,5 +1,6 @@
 # Live demo
 https://pensive-noether-032521.netlify.app/
+![ezgif-7-a7fa1b026cbc](https://user-images.githubusercontent.com/10210800/130479748-6784b14e-0d29-4ff7-b394-7fca1f831944.gif)
 
 # How to run this repo in local development
 1. install yarn
