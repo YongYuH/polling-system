@@ -23,7 +23,7 @@ yarn dev
 * pie chart: use `react-minimal-pie-chart` to render statistic data of poll results.
 * local storage: use local storage as data storage to retrieve initial value and update value.
 
-ui assumptions
+## Assumptions
 * draft section: add draft section and alert dialog to confirm user's input before submission.
 * pie chart: set start angle from 180 degree and rotate counterclockwise.
 
